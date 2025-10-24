@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import th.ac.ku.restaurant.dto.RestaurantRequest;
 import th.ac.ku.restaurant.entity.Restaurant;
@@ -19,8 +21,8 @@ public class RestaurantService {
     this.repository = repository;
   }
 
-  public List<Restaurant> getAll() {
-    return repository.findAll();
+  public Page<Restaurant> getRestaurantPage(PageRequest pageRequest) {
+    return repository.findAll(pageRequest);
   }
 
   public Restaurant getRestaurantById(UUID id) {
