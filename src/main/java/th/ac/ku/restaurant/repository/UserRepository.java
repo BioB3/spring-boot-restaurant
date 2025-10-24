@@ -1,0 +1,12 @@
+package th.ac.ku.restaurant.repository;
+
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import th.ac.ku.restaurant.entity.User;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
+  User findByUsername(String username);
+  boolean existsByUsername(String username);
+}

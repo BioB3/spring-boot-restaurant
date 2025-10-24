@@ -1,14 +1,13 @@
 package th.ac.ku.restaurant.service;
 
-import th.ac.ku.restaurant.entity.Restaurant;
-import th.ac.ku.restaurant.repository.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import th.ac.ku.restaurant.dto.RestaurantRequest;
+import th.ac.ku.restaurant.entity.Restaurant;
+import th.ac.ku.restaurant.repository.RestaurantRepository;
 
 @Service
 public class RestaurantService {
@@ -17,15 +16,15 @@ public class RestaurantService {
 
   @Autowired
   public RestaurantService(RestaurantRepository repository) {
-      this.repository = repository;
+    this.repository = repository;
   }
-  
+
   public List<Restaurant> getAll() {
     return repository.findAll();
   }
 
   public Restaurant getRestaurantById(UUID id) {
-    return repository.findById(id).get();  
+    return repository.findById(id).get();
   }
 
   public Restaurant getRestaurantByName(String name) {
@@ -36,9 +35,14 @@ public class RestaurantService {
     return repository.findByLocation(location);
   }
 
-  public Restaurant create(Restaurant restaurant) {
-    restaurant.setCreatedAt(Instant.now());
-    Restaurant record = repository.save(restaurant);
+  public Restaurant create(RestaurantRequest request) {
+    Restaurant dao = new Restaurant();
+    dao.setName(request.getName());
+    dao.setRating(request.getRating());
+    dao.setLocation(request.getLocation());
+    dao.setCreatedAt(Instant.now());
+    dao.setUpdatedAt(Instant.now());
+    Restaurant record = repository.save(dao);
     return record;
   }
 
