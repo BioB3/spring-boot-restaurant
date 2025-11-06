@@ -1,6 +1,9 @@
 package th.ac.ku.restaurant.controller;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,7 +37,9 @@ public class AuthenticationController {
   }
 
   @PostMapping("/login")
-  public String authenticateUser(@RequestBody LoginRequest request) {
+  public ResponseEntity<String> authenticateUser(
+    @Valid @RequestBody LoginRequest request
+  ) {
     Authentication authentication = authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(
         request.getUsername(),
@@ -42,16 +47,18 @@ public class AuthenticationController {
       )
     );
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-    return jwtUtils.generateToken(userDetails.getUsername());
+    return ResponseEntity.ok(jwtUtils.generateToken(userDetails.getUsername()));
   }
 
   @PostMapping("/signup")
-  public String registerUser(@RequestBody SignUpRequest request) {
+  public ResponseEntity<String> registerUser(
+    @Valid @RequestBody SignUpRequest request
+  ) {
     if (
       userService.userExists(request.getUsername())
-    ) return "Error: Username is already taken!";
+    ) throw new EntityExistsException("Username already exists");
 
     userService.createUser(request);
-    return "User registered successfully!";
+    return ResponseEntity.ok("User registered successfully!");
   }
 }
