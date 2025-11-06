@@ -1,5 +1,7 @@
 package th.ac.ku.restaurant.service;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -26,11 +28,15 @@ public class RestaurantService {
   }
 
   public Restaurant getRestaurantById(UUID id) {
-    return repository.findById(id).get();
+    return repository
+      .findById(id)
+      .orElseThrow(() -> new EntityNotFoundException("Restaurant not found"));
   }
 
   public Restaurant getRestaurantByName(String name) {
-    return repository.findByName(name);
+    return repository
+      .findByName(name)
+      .orElseThrow(() -> new EntityNotFoundException("Restaurant not found"));
   }
 
   public List<Restaurant> getRestaurantByLocation(String location) {
@@ -38,6 +44,9 @@ public class RestaurantService {
   }
 
   public Restaurant create(RestaurantRequest request) {
+    if (
+      repository.existsByName(request.getName())
+    ) throw new EntityExistsException("Restaurant name already exists");
     Restaurant dao = new Restaurant();
     dao.setName(request.getName());
     dao.setRating(request.getRating());

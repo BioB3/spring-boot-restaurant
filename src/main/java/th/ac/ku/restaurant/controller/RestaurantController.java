@@ -1,5 +1,6 @@
 package th.ac.ku.restaurant.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class RestaurantController {
   }
 
   @PostMapping("/restaurants")
-  public Restaurant create(@RequestBody RestaurantRequest restaurant) {
+  public Restaurant create(@Valid @RequestBody RestaurantRequest restaurant) {
     return service.create(restaurant);
   }
 
