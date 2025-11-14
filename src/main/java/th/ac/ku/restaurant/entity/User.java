@@ -1,6 +1,7 @@
 package th.ac.ku.restaurant.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,6 +9,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Data;
+import th.ac.ku.restaurant.Security.AttributeEncryptor;
 
 @Data
 @Entity
@@ -23,7 +25,9 @@ public class User {
 
   private String password;
 
+  @Convert(converter = AttributeEncryptor.class)
   private String name;
+
   private String role;
   private Instant createdAt;
 }
