@@ -1,6 +1,7 @@
 package th.ac.ku.restaurant.service;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,5 +53,13 @@ public class UserService {
       user = userRepository.save(dao);
     }
     return user;
+  }
+
+  public String getUserRole(String username) {
+    User user = userRepository.findByUsername(username);
+    if (user == null) {
+      throw new EntityNotFoundException("No user with given username is found");
+    }
+    return user.getRole();
   }
 }
