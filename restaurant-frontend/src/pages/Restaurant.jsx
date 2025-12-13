@@ -4,7 +4,7 @@ import api from "../api/axios";
 
 export default function Restaurant() {
   const [restaurants, setRestaurants] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -46,6 +46,21 @@ export default function Restaurant() {
       <p>
         Welcome, <strong>{user.username}</strong>
       </p>
+
+      {user.role.toLowerCase().includes("admin") && (
+        <a
+          href="/restaurant/create"
+          style={{
+            borderRadius: "8px",
+            border: "1px solid transparent",
+            padding: "0.6em 1.2em",
+            marginBottom: "1rem",
+            backgroundColor: "#ffffff",
+          }}
+        >
+          Add a Restaurant
+        </a>
+      )}
 
       <button onClick={handleLogout} style={{ marginBottom: "1rem" }}>
         Logout
